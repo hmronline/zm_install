@@ -31,7 +31,7 @@ apt-get update && \
 # Install Dlib and Face Recognition
 # https://forums.zoneminder.com/viewtopic.php?t=30064
 # Had several issues (seg faults) trying to compile it under LXC host...
-# After adding all dependencies on PVE host it compiled fine
+# After adding all dependencies on PVE host it compiled fine on the LXC host
 cd /root/ && rm -rf /root/dlib && git clone https://github.com/davisking/dlib.git && \
         cd /root/dlib && rm -rf build && mkdir build && cd build && cmake .. && cmake --build . && \
         cd /root/dlib && python3 setup.py install --verbose --clean
