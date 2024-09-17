@@ -1,0 +1,36 @@
+
+{
+    "state": "alarm",
+    "hookvalue": "0",
+    "monitor": "10",
+    "eventid": "231825",
+    "detection": {
+        "boxes": [
+            [
+                330,
+                529,
+                604,
+                1135
+            ]
+        ],
+        "frame_id": "snapshot",
+        "confidences": [
+            0.714597642421722
+        ],
+        "labels": [
+            "person"
+        ],
+        "image_dimensions": {
+            "resized": [
+                1422,
+                800
+            ],
+            "original": [
+                1280,
+                720
+            ]
+        }
+    },
+    "eventtype": "event_start",
+    "name": "Cam_Corridor:(231825) [s] detected:person:71%  Motion"
+}

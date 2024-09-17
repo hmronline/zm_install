@@ -1,0 +1,32 @@
+
+mqtt:
+  - binary_sensor:
+      name: "cam_corridor_detection_event"
+      state_topic: "zoneminder/10"
+      value_template: "{{ value_json.eventtype }}"
+      payload_on: "event_start"
+      payload_off: "event_end"
+      json_attributes_topic: "zoneminder/10"
+      json_attributes_template: "{{ value_json | tojson }}"
+
+automation:
+  - id: rule_corridor_detection_event
+    alias: 'rule_corridor_detection_event'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.cam_corridor_detection_event
+        to: 'on'
+    condition: "{{ state_attr('binary_sensor.cam_corridor_detection_event', 'detection') != None }}"
+    action:
+      - service: downloader.download_file
+        data:
+          url: !secret zm_url_corridor_event_video
+          filename: corridor_latest.mp4
+          overwrite: true
+      - service: notify.telegram_h
+        data:
+          message: "Detected {{ state_attr('binary_sensor.cam_corridor_detection_event', 'detection').labels | join(', ') }}"
+          data:
+            video:
+              - file: /share/corridor_latest.mp4
+                caption: "Detected {{ state_attr('binary_sensor.cam_corridor_detection_event', 'detection').labels | join(', ') }}"

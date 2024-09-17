@@ -28,7 +28,7 @@ git clone https://github.com/zoneminder/zmeventnotification.git && \
         cd /root/
 
 # Edit zmeventnotification.ini as described in documentation
-# I've disabled FCM and SSL
+# I've disabled FCM and SSL, and enabled MQTT
 
 # Debian 12 FIX
 # THIS MIGHT BREAK PYTHON

@@ -1,0 +1,10 @@
+
+{
+    "detection": [],
+    "monitor": "10",
+    "eventid": "231825",
+    "state": "alarm",
+    "hookvalue": 0,
+    "name": "Ended:Cam_Corridor:(231825) Motion: Corridor, DormitorioF, Dormitorios",
+    "eventtype": "event_end"
+}
