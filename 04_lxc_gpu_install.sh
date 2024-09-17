@@ -24,5 +24,3 @@ wget https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/cu
         apt update && apt full-upgrade && \
         apt install -y cuda && \
         apt install -y libcudnn8-dev
-
-# Run nvidia-smi and check GPU is properly detected

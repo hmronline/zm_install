@@ -3,9 +3,6 @@
 ## Run this on LXC Guest
 ##
 
-export CUDA_ARCH_BIN=7.5
-export OPENCV_VER=4.7.0 # 4.x
-
 # Test
 # Make sure OpenCV works:
 # After you install opencv, make sure it works. 
