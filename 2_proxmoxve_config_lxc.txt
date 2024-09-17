@@ -2,8 +2,8 @@
 
 # OS: same as Proxmox Host (Debian)
 # Disk needs to be sized for about 30GB
-
 # Adjust these according your installed driver
+
 lxc.cgroup2.devices.allow: c 195:* rwm
 lxc.cgroup2.devices.allow: c 236:* rwm
 lxc.cgroup2.devices.allow: c 507:* rwm

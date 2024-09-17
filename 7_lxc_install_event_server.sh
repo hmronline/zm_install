@@ -23,11 +23,14 @@ git clone https://github.com/zoneminder/zmeventnotification.git && \
         git fetch --tags && \
         git checkout $(git describe --tags $(git rev-list --tags --max-count=1)) && \
         ./install.sh && \
-        cd ˜
+        cd /root/
 
 # Set permissions
 mkdir -p /var/lib/zmeventnotification/images && \
         chown -R www-data:www-data /var/lib/zmeventnotification/
+
+
+# Edit objectconfig.ini, zmeventserver.ini and secrets.ini
 
 # Test
 # sudo -u www-data /var/lib/zmeventnotification/bin/zm_event_start.sh <eid> <mid> # replace www-data with apache if needed
