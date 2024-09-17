@@ -1,6 +1,6 @@
 ##
 ## Run this on Proxmox Host
-## PromoxVE 7.2
+## PromoxVE 8
 ##
 
 ### Install GPU
@@ -23,12 +23,10 @@ KERNEL=="nvidia", RUN+="/bin/bash -c '/usr/bin/nvidia-smi -L && /bin/chmod 666 /
 KERNEL=="nvidia_uvm", RUN+="/bin/bash -c '/usr/bin/nvidia-modprobe -c0 -u && /bin/chmod 0666 /dev/nvidia-uvm*'"
 EOF
 
-# Reboot Proxmox Host
-
-# Run nvidia-smi and check GPU is properly detected
-
 # Check GPU Architecture version as explained here (in Step #5): 
 # https://pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
 
 # Mine es 7.5, so update this variable set on 6_lxc_install_opencv.sh:
 export CUDA_ARCH_BIN=7.5
+
+# Reboot Proxmox Host

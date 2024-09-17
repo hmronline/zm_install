@@ -20,20 +20,19 @@ apt-get update && \
         apt install -y build-essential cmake ninja-build && \
         apt install -y libtbb-dev && \
         apt install -y libatlas-base-dev gfortran  && \
-        apt install -y libdc1394-dev libdc1394-25 libdc1394-22-dev && \
+        apt install -y libdc1394-dev libdc1394-25 && \
         apt install -y libavcodec-dev libavformat-dev libswscale-dev libavresample-dev && \
         apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev && \
         apt install -y libavdevice-dev libavfilter-dev libswresample-dev libavutil-dev  && \
         apt install -y libopenblas-dev liblapack-dev libblas-dev && \
         apt install -y libgstreamer-plugins-base1.0-0 && \
-        pip3 install -U pip && \
-        pip3 install -U numpy --no-cache-dir
+        pip3 install cmake --break-system-packages
 
 # Install Dlib and Face Recognition
 # https://forums.zoneminder.com/viewtopic.php?t=30064
 # Had several issues (seg faults) trying to compile it under LXC host...
 # After adding all dependencies on PVE host it compiled fine
-cd /root/ && git clone https://github.com/davisking/dlib.git && \
+cd /root/ && rm -rf /root/dlib && git clone https://github.com/davisking/dlib.git && \
         cd /root/dlib && rm -rf build && mkdir build && cd build && cmake .. && cmake --build . && \
         cd /root/dlib && python3 setup.py install --verbose --clean
 
@@ -42,7 +41,7 @@ cd /root/ && git clone https://github.com/davisking/dlib.git && \
 #        pip3 install -U dlib --no-cache-dir --verbose
 
 # Install Face Recognition
-pip3 install -U face_recognition --no-cache-dir
+pip3 install -U face_recognition --no-cache-dir --break-system-packages
 
 # Download and unpack sources
 cd /root/ && \
@@ -90,15 +89,8 @@ rm -rf /root/build && mkdir -p /root/build && cd /root/build && rm -f CMakeCache
 cd /root/build && \
         ninja && \
         ninja install && \
-        cd /root/
+        cd /root/ && \
+        rm -rf /root/build && \
+        rm -rf /root/opencv-${OPENCV_VER} && \
+        rm -rf /root/opencv_contrib-${OPENCV_VER}
 
-rm -rf /root/build && rm -rf /root/opencv-${OPENCV_VER} && rm -rf /root/opencv_contrib-${OPENCV_VER}
-
-# Test
-# Make sure OpenCV works:
-# After you install opencv, make sure it works. 
-# Start python3 and inside the interpreter, do a import cv2. 
-# If it seg faults, you have a problem with the package you installed. 
-# Like I said, I’ve never had issues after building from source.
-# Note that if you get an error saying cv2 not found that means you did not install it in a place python3 can find it 
-# (you might have installed it for python2 by mistake)

@@ -12,7 +12,4 @@ wget https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multi
     apt update && apt -y full-upgrade && \
     apt -y install libnvidia-encode1 ffmpeg
 
-# Verify CUDA is now supported in FFMPEG
-/usr/bin/ffmpeg -hwaccels
-
 # You will be now able to configure monitors with CUDA support
