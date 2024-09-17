@@ -3,7 +3,7 @@
 ## Run this on LXC Guest
 ##
 
-# Verify CUDA is now supported in FFMPEG
+### Verify CUDA is now supported in FFMPEG
 /usr/bin/ffmpeg -hwaccels
 
 # look for something like this:

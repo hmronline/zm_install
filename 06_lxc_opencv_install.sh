@@ -14,7 +14,7 @@ export OPENCV_VER=4.7.0 # 4.x
 # https://github.com/opencv/opencv/issues/16380
 # https://www.reddit.com/r/ZoneMinder/comments/gvxvni/zoneminder_and_zmeventnotification_with_gpu/
 
-# Install dependencies
+## Install dependencies
 apt-get update && \
         apt install -y g++ wget unzip python3-dev python3-pip python3-dev && \
         apt install -y build-essential cmake ninja-build && \
@@ -28,7 +28,7 @@ apt-get update && \
         apt install -y libgstreamer-plugins-base1.0-0 && \
         pip3 install cmake --break-system-packages
 
-# Install Dlib and Face Recognition
+## Install Dlib and Face Recognition
 # https://forums.zoneminder.com/viewtopic.php?t=30064
 # Had several issues (seg faults) trying to compile it under LXC host...
 # After adding all dependencies on PVE host it compiled fine on the LXC host
@@ -40,10 +40,10 @@ cd /root/ && rm -rf /root/dlib && git clone https://github.com/davisking/dlib.gi
 # cd /root/dlib && python3 setup.py install --clean --no DLIB_USE_CUDA
 #        pip3 install -U dlib --no-cache-dir --verbose
 
-# Install Face Recognition
+## Install Face Recognition
 pip3 install -U face_recognition --no-cache-dir --break-system-packages
 
-# Download and unpack sources
+## Download and unpack sources
 cd /root/ && \
         rm -rf opencv* && \
         wget -O opencv.zip https://github.com/opencv/opencv/archive/${OPENCV_VER}.zip && \
@@ -52,7 +52,7 @@ cd /root/ && \
         unzip opencv.zip && rm opencv.zip && \
         unzip opencv_contrib.zip && rm opencv_contrib.zip
 
-# Configure
+## Configure
 # make sure you set the CUDA_ARCH_BIN variable based on your NVIDIA GPU architecture version
 rm -rf /root/build && mkdir -p /root/build && cd /root/build && rm -f CMakeCache.txt && \
         cmake -GNinja -v \
@@ -85,7 +85,7 @@ rm -rf /root/build && mkdir -p /root/build && cd /root/build && rm -f CMakeCache
                 -D INSTALL_C_EXAMPLES=OFF \
                 /root/opencv-${OPENCV_VER}
 
-# Build (this may take a while)
+## Build (this may take a while)
 cd /root/build && \
         ninja && \
         ninja install && \

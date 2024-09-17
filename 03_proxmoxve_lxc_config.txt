@@ -1,9 +1,9 @@
 # /etc/pve/lxc/XYZ.conf
 
-# OS: same as Proxmox Host (Debian): Debian 12 for Proxmox 8
+# OS: same as Proxmox Host
 # Disk needs to be sized for about 30GB
-# Adjust these according your installed driver
 
+# Adjust these according your installed driver:
 lxc.cgroup2.devices.allow: c 195:* rwm
 lxc.cgroup2.devices.allow: c 236:* rwm
 lxc.cgroup2.devices.allow: c 507:* rwm
