@@ -1,12 +1,14 @@
 ##
 ## Run this on Proxmox Host
-## PromoxVE 8
 ##
+
+export DEBIAN_VERSION=debian12
+export DEBIAN_ARCHITECTURE=x86_64
 
 ### Install GPU
 # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#prepare-debian
 # https://pve.proxmox.com/wiki/Developer_Workstations_with_Proxmox_VE_and_X11#Optional:_NVidia_Drivers
-wget https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/cuda-keyring_1.0-1_all.deb && \
+wget https://developer.download.nvidia.com/compute/cuda/repos/${DEBIAN_VERSION}/${DEBIAN_ARCHITECTURE}/cuda-keyring_1.0-1_all.deb && \
         sudo dpkg -i cuda-keyring_1.0-1_all.deb && \
         add-apt-repository non-free && \
         add-apt-repository contrib && \
@@ -14,7 +16,7 @@ wget https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/cu
         apt-get -y pve-headers && \
         apt-get -y install cuda
 
-# Config GPU
+### Config GPU
 echo -e "nvidia\nnvidia_uvm\nnvidia_drm" > /etc/modules-load.d/nvidia.conf
 cat > /etc/udev/rules.d/70-nvidia.rules <<EOF
 # Create /nvidia0, /dev/nvidia1 … and /nvidiactl when nvidia module is loaded
@@ -23,10 +25,11 @@ KERNEL=="nvidia", RUN+="/bin/bash -c '/usr/bin/nvidia-smi -L && /bin/chmod 666 /
 KERNEL=="nvidia_uvm", RUN+="/bin/bash -c '/usr/bin/nvidia-modprobe -c0 -u && /bin/chmod 0666 /dev/nvidia-uvm*'"
 EOF
 
+### Get GPU Architecture Version
 # Check GPU Architecture version as explained here (in Step #5): 
 # https://pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
 
-# Mine es 7.5, so update this variable set on 6_lxc_install_opencv.sh:
+# Mine es 7.5, so update this variable export on 6_lxc_install_opencv.sh:
 export CUDA_ARCH_BIN=7.5
 
-# Reboot Proxmox Host
+### Reboot Proxmox Host

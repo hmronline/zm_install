@@ -3,6 +3,9 @@
 ## Run this on LXC Guest
 ##
 
+export DEBIAN_VERSION=debian12
+export DEBIAN_ARCHITECTURE=x86_64
+
 ### Install GPU support
 # Update Repos
 apt-get update && \
@@ -17,7 +20,7 @@ apt-get update && \
 # https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html
 # https://gist.github.com/kmhofmann/cee7c0053da8cc09d62d74a6a4c1c5e4
 
-wget https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/cuda-keyring_1.0-1_all.deb && \
+wget https://developer.download.nvidia.com/compute/cuda/repos/${DEBIAN_VERSION}/${DEBIAN_ARCHITECTURE}/cuda-keyring_1.0-1_all.deb && \
         dpkg -i cuda-keyring_1.0-1_all.deb && \
         add-apt-repository non-free && \
         add-apt-repository contrib && \
