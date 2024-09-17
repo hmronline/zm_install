@@ -12,6 +12,7 @@ export OPENCV_VER=4.7.0 # 4.x
 # https://github.com/opencv/opencv/issues/22132
 # https://forums.developer.nvidia.com/t/opencv-building-with-cuda-cudnn-no-cudnn/174228
 # https://github.com/opencv/opencv/issues/16380
+# https://www.reddit.com/r/ZoneMinder/comments/gvxvni/zoneminder_and_zmeventnotification_with_gpu/
 
 # Install dependencies
 apt-get update && \
@@ -24,16 +25,24 @@ apt-get update && \
         apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev && \
         apt install -y libavdevice-dev libavfilter-dev libswresample-dev libavutil-dev  && \
         apt install -y libopenblas-dev liblapack-dev libblas-dev && \
+        apt install -y libgstreamer-plugins-base1.0-0 && \
         pip3 install -U pip && \
         pip3 install -U numpy --no-cache-dir
 
 # Install Dlib and Face Recognition
+# https://forums.zoneminder.com/viewtopic.php?t=30064
+# Had several issues (seg faults) trying to compile it under LXC host...
+# After adding all dependencies on PVE host it compiled fine
 cd /root/ && git clone https://github.com/davisking/dlib.git && \
-        cd /root/dlib && mkdir build; cd build; cmake ..; cmake --build . && \
-        cd /root/dlib && python3 setup.py install && \
-        pip3 install -U face_recognition --no-cache-dir
+        cd /root/dlib && rm -rf build && mkdir build && cd build && cmake .. && cmake --build . && \
+        cd /root/dlib && python3 setup.py install --verbose --clean
 
-#        pip3 install -U dlib --no-cache-dir && \
+# Alternatives
+# cd /root/dlib && python3 setup.py install --clean --no DLIB_USE_CUDA
+#        pip3 install -U dlib --no-cache-dir --verbose
+
+# Install Face Recognition
+pip3 install -U face_recognition --no-cache-dir
 
 # Download and unpack sources
 cd /root/ && \
