@@ -68,13 +68,12 @@ rm /etc/mysql/my.cnf && \
 # Step 5: Configure nginx & PHP
 cat > /etc/nginx/zoneminder.conf <<EOF
 location /zm/cgi-bin {
-        root /usr/lib;
         gzip off;
         auth_basic off;
-        #alias /usr/lib/zoneminder/cgi-bin;     
+        alias /usr/lib/zoneminder/cgi-bin;     
         include fastcgi_params;
-        #fastcgi_param SCRIPT_FILENAME \$request_filename;
-        fastcgi_param SCRIPT_FILENAME /usr/lib/zoneminder/cgi-bin/nph-zms;
+        fastcgi_param SCRIPT_FILENAME \$request_filename;
+        #fastcgi_param SCRIPT_FILENAME /usr/lib/zoneminder/cgi-bin/nph-zms;
         fastcgi_intercept_errors on;
         fastcgi_param HTTP_PROXY "";
         fastcgi_pass unix:/var/run/fcgiwrap.socket;
@@ -117,10 +116,15 @@ EOF
 
 sed -i "s|^.*index index.html index.htm index.nginx-debian.html;|index index.php index.html index.htm index.nginx-debian.html;|" /etc/nginx/sites-available/default
 sed -i "s|^.*# include snippets/snakeoil.conf;|# include snippets/snakeoil.conf;\ninclude /etc/nginx/zoneminder.conf;|" /etc/nginx/sites-available/default
+sed -i 's|^FCGI_CHILDREN="1"|FCGI_CHILDREN="10"|' /etc/init.d/fcgiwrap
 
 # 30 is the number of cameras
 echo "DAEMON_OPTS=-c 30" > /etc/default/fcgiwrap
 systemctl restart fcgiwrap
+
+# Set TimeZone
+#https://github.com/ZoneMinder/zoneminder/issues/2565
+timedatectl set-timezone America/Argentina/Buenos_Aires
 
 # Step 6: Set permissions
 chmod 740 /etc/zm/zm.conf && \

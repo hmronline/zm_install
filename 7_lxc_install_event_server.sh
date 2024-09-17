@@ -29,6 +29,8 @@ git clone https://github.com/zoneminder/zmeventnotification.git && \
 mkdir -p /var/lib/zmeventnotification/images && \
         chown -R www-data:www-data /var/lib/zmeventnotification/
 
+# fix
+# https://forums.zoneminder.com/viewtopic.php?t=32223
 
 # Edit objectconfig.ini, zmeventserver.ini and secrets.ini
 
