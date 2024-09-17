@@ -2,21 +2,28 @@
 ## Run this on Proxmox Host
 ##
 
+### Doc
+# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#prepare-debian
+# https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html
+
 export DEBIAN_VERSION=debian12
 export DEBIAN_ARCHITECTURE=x86_64
 
-### Install GPU
-# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#prepare-debian
-# https://pve.proxmox.com/wiki/Developer_Workstations_with_Proxmox_VE_and_X11#Optional:_NVidia_Drivers
-wget https://developer.download.nvidia.com/compute/cuda/repos/${DEBIAN_VERSION}/${DEBIAN_ARCHITECTURE}/cuda-keyring_1.0-1_all.deb && \
-        sudo dpkg -i cuda-keyring_1.0-1_all.deb && \
-        add-apt-repository non-free && \
-        add-apt-repository contrib && \
+### Update Repos
+wget https://developer.download.nvidia.com/compute/cuda/repos/${DEBIAN_VERSION}/${DEBIAN_ARCHITECTURE}/cuda-keyring_1.1-1_all.deb && \
+        sudo dpkg -i cuda-keyring_1.1-1_all.deb && \
+        rm cuda-keyring_1.1-1_all.deb && \
+        apt-get -y install --no-install-recommends software-properties-common && \
+        apt-add-repository -y contrib && \
         apt-get update && \
-        apt-get -y pve-headers && \
-        apt-get -y install cuda
+        apt-get -y full-upgrade
 
-### Config GPU
+### Install GPU Support
+apt-get -y install pve-headers && \
+        apt-get -y install cuda && \
+        apt-get -y install libcudnn9-dev-cuda-12
+
+### Config GPU Support
 echo -e "nvidia\nnvidia_uvm\nnvidia_drm" > /etc/modules-load.d/nvidia.conf
 cat > /etc/udev/rules.d/70-nvidia.rules <<EOF
 # Create /nvidia0, /dev/nvidia1 … and /nvidiactl when nvidia module is loaded

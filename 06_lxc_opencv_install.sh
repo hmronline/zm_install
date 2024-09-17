@@ -4,9 +4,9 @@
 ##
 
 export CUDA_ARCH_BIN=7.5
-export OPENCV_VER=4.7.0 # 4.x
+export OPENCV_VER=4.10.0
 
-### Install OpenCV
+### Doc
 # https://pyimagesearch.com/2020/02/03/how-to-use-opencvs-dnn-module-with-nvidia-gpus-cuda-and-cudnn/
 # https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html
 # https://github.com/opencv/opencv/issues/22132
@@ -16,25 +16,35 @@ export OPENCV_VER=4.7.0 # 4.x
 
 ## Install dependencies
 apt-get update && \
-        apt install -y g++ wget unzip python3-dev python3-pip python3-dev && \
-        apt install -y build-essential cmake ninja-build && \
-        apt install -y libtbb-dev && \
-        apt install -y libatlas-base-dev gfortran  && \
-        apt install -y libdc1394-dev libdc1394-25 && \
-        apt install -y libavcodec-dev libavformat-dev libswscale-dev libavresample-dev && \
-        apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev && \
-        apt install -y libavdevice-dev libavfilter-dev libswresample-dev libavutil-dev  && \
-        apt install -y libopenblas-dev liblapack-dev libblas-dev && \
-        apt install -y libgstreamer-plugins-base1.0-0 && \
+        apt-get -y install g++ wget unzip python3-dev python3-pip python3-dev && \
+        apt-get -y install build-essential cmake ninja-build && \
+        apt-get -y install libtbb-dev && \
+        apt-get -y install libatlas-base-dev gfortran  && \
+        apt-get -y install libdc1394-dev libdc1394-25 && \
+        apt-get -y install libavcodec-dev libavformat-dev libswscale-dev libavresample-dev && \
+        apt-get -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev && \
+        apt-get -y install libavdevice-dev libavfilter-dev libswresample-dev libavutil-dev  && \
+        apt-get -y install libopenblas-dev liblapack-dev libblas-dev && \
+        apt-get -y install libgstreamer-plugins-base1.0-0 && \
         pip3 install cmake --break-system-packages
 
 ## Install Dlib and Face Recognition
 # https://forums.zoneminder.com/viewtopic.php?t=30064
 # Had several issues (seg faults) trying to compile it under LXC host...
 # After adding all dependencies on PVE host it compiled fine on the LXC host
-cd /root/ && rm -rf /root/dlib && git clone https://github.com/davisking/dlib.git && \
-        cd /root/dlib && rm -rf build && mkdir build && cd build && cmake .. && cmake --build . && \
-        cd /root/dlib && python3 setup.py install --verbose --clean
+cd /root/ && \
+        rm -rf /root/dlib && \
+        git clone https://github.com/davisking/dlib.git && \
+        cd /root/dlib && \
+        rm -rf build && \
+        mkdir build && \
+        cd build && \
+        cmake .. && \
+        cmake --build . && \
+        cd /root/dlib && \
+        python3 setup.py install --verbose --clean && \
+        cd /root/ && \
+        rm -rf /root/dlib
 
 # Alternatives
 # cd /root/dlib && python3 setup.py install --clean --no DLIB_USE_CUDA
@@ -54,8 +64,11 @@ cd /root/ && \
 
 ## Configure
 # make sure you set the CUDA_ARCH_BIN variable based on your NVIDIA GPU architecture version
-rm -rf /root/build && mkdir -p /root/build && cd /root/build && rm -f CMakeCache.txt && \
-        cmake -GNinja -v \
+rm -rf /root/build && \
+        mkdir -p /root/build && \
+        cd /root/build && \
+        rm -f CMakeCache.txt && \
+        cmake -GNinja \
                 -D CMAKE_BUILD_TYPE=RELEASE \
                 -D CMAKE_CONFIGURATION_TYPES=RELEASE \
                 -D CMAKE_INSTALL_PREFIX=/usr/local \

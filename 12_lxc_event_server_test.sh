@@ -5,11 +5,15 @@
 
 ### Important
 # Make sure you have at least one camera with an event/recording
-export ZM_EVENT_ID=231400
+export ZM_EVENT_ID=11440
 export ZM_MONITOR_ID=2
 
 ### Test
 # replace www-data with apache if needed
+
+# Make sure no errors are shown when training faces (if it fails, OpenCV is not working)
+sudo -u www-data /var/lib/zmeventnotification/bin/zm_train_faces.py
+
 
 sudo -u www-data /var/lib/zmeventnotification/bin/zm_event_start.sh ${ZM_EVENT_ID} ${ZM_MONITOR_ID}
 

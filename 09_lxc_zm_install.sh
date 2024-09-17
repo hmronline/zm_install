@@ -21,6 +21,12 @@ export ZM_DB_PASS='zmpass'
 ### Install ZoneMinder
 
 ## Step 1: Update Repos
+# Add ZoneMinder repo
+echo "deb https://zmrepo.zoneminder.com/debian/release-${ZM_VERS} "`lsb_release  -c -s`"/" | sudo tee /etc/apt/sources.list.d/01_zoneminder.list
+wget -O - https://zmrepo.zoneminder.com/debian/archive-keyring.gpg | sudo apt-key add -
+read -p "Warning! Check above to insure the line says OK. If not the GPG signing key was not installed and you will need to figure out why before continuing." nothing
+
+# Update repos
 apt-get update && \
         apt-get -y upgrade -o Dpkg::Options::="--force-confold" && \
         apt-get -y dist-upgrade -o Dpkg::Options::="--force-confold" && \
@@ -28,25 +34,8 @@ apt-get update && \
         apt-get -y install apt-transport-https lsb-release gnupg gnupg2 && \
         apt-get -y autoremove
 
-# Add ZoneMinder repo
-echo "deb https://zmrepo.zoneminder.com/debian/release-${ZM_VERS} "`lsb_release  -c -s`"/" | sudo tee /etc/apt/sources.list.d/01_zoneminder.list
-wget -O - https://zmrepo.zoneminder.com/debian/archive-keyring.gpg | sudo apt-key add -
-read -p "Warning! Check above to insure the line says OK. If not the GPG signing key was not installed and you will need to figure out why before continuing." nothing
-
-# Add APT policy for conflicting repos
-cat > /etc/apt/preferences.d/zm-policy <<EOF
-Package: *
-Pin: origin zmrepo.zoneminder.com
-Pin-Priority: 1001
-
-Package: zoneminder
-Pin: origin www.deb-multimedia.org
-Pin-Priority: -1
-EOF
-
 ## Step 2: Install Dependencies & Related
-apt-get update && \
-        apt-get -y install nginx nginx-extras php-fpm fcgiwrap && \
+apt-get -y install nginx nginx-extras php-fpm fcgiwrap && \
         export PHP_VERS=$(php --version | head -1 | cut -d' ' -f2 | cut -d'.' -f1-2) && \
         sed -i "s|^;cgi.fix_pathinfo=.*|cgi.fix_pathinfo=1|" /etc/php/$PHP_VERS/fpm/php.ini && \
         systemctl restart php$PHP_VERS-fpm
@@ -58,7 +47,7 @@ apt-get update && \
         apt-get -y install --no-install-recommends libvlc-dev libvlccore-dev vlc
 
 ## Step 3: Install ZoneMinder
-apt-get -y install zoneminder zoneminder-doc -no-install-recommends && \
+apt-get -y install zoneminder zoneminder-doc --no-install-recommends && \
 apt-get -y remove apache2 && \
 sed -i 's|^ZM_PATH_FFMPEG="/usr/bin/ffmpeg"|ZM_PATH_FFMPEG="/usr/bin/ffmpeg -hwaccel cuda"|' /etc/zm/conf.d/01-system-paths.conf
 
@@ -90,10 +79,6 @@ location ~ /zm/api/(css|img|ico) {
         try_files \$uri \$uri/ =404;
 }
 
-location ~* /zm/.*\.(txt|log)$ {
-        deny all;
-}
-
 location /zm {
         gzip off;
         auth_basic off;
@@ -114,9 +99,15 @@ location /zm {
                 fastcgi_pass unix:/var/run/php/php$PHP_VERS-fpm.sock;
         }
 }
+
+location ~* /zm/.*\.(txt|log)$ {
+        deny all;
+}
+
 EOF
 
 sed -i "s|^.*index index.html index.htm index.nginx-debian.html;|index index.php index.html index.htm index.nginx-debian.html;|" /etc/nginx/sites-available/default
+sed -i "s|^include /etc/nginx/zoneminder.conf;||" /etc/nginx/sites-available/default
 sed -i "s|^.*# include snippets/snakeoil.conf;|# include snippets/snakeoil.conf;\ninclude /etc/nginx/zoneminder.conf;|" /etc/nginx/sites-available/default
 
 ## Step 6: Configure PHP
@@ -128,7 +119,7 @@ systemctl restart fcgiwrap
 
 # Set TimeZone
 # https://github.com/ZoneMinder/zoneminder/issues/2565
-timedatectl set-timezone America/Argentina/Buenos_Aires
+timedatectl set-timezone ${TZ}
 
 ## Step 7: Set permissions
 chmod 740 /etc/zm/zm.conf && \
@@ -145,6 +136,6 @@ zmupdate.pl -f
 
 ## Step 10: Start services
 systemctl enable zoneminder && \
-        systemctl start zoneminder && \
+        systemctl restart zoneminder && \
         systemctl restart nginx
 
