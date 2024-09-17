@@ -68,9 +68,7 @@ adduser www-data video && \
 # Step 6: Set permissions
 chmod 740 /etc/zm/zm.conf && \
         chown root:www-data /etc/zm/zm.conf && \
-        chown -R www-data:www-data /usr/share/zoneminder/ && \
-        mkdir -p /var/lib/zmeventnotification/images && \
-        chown -R www-data:www-data /var/lib/zmeventnotification/
+        chown -R www-data:www-data /usr/share/zoneminder/
 
 # Step 7: zmaudit
 echo '#!/bin/sh' > /etc/cron.weekly/zmaudit && \
@@ -85,7 +83,6 @@ systemctl enable zoneminder && \
         systemctl start zoneminder && \
         systemctl reload apache2
 
-# Step 10: Making sure ZoneMinder works
+# Step 10: Make sure ZoneMinder works
 ZM_INSTALLED_VERS=$(curl http://localhost/zm/api/host/getVersion.json -q 2>/dev/null|grep version|cut -d'"' -f4|cut -d'.' -f1-2)
 echo -e "INSTALLED: ${ZM_INSTALLED_VERS}"
-

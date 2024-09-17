@@ -1,11 +1,12 @@
+# /etc/pve/lxc/XYZ.conf
+
 # OS: same as Proxmox Host (Debian)
-# Disk needs 15GB
+# Disk needs to be sized for about 30GB
 
 # Adjust these according your installed driver
-
 lxc.cgroup2.devices.allow: c 195:* rwm
-lxc.cgroup2.devices.allow: c 226:* rwm
-lxc.cgroup2.devices.allow: c 509:* rwm
+lxc.cgroup2.devices.allow: c 236:* rwm
+lxc.cgroup2.devices.allow: c 507:* rwm
 lxc.mount.entry: /dev/nvidia0 dev/nvidia0 none bind,optional,create=file
 lxc.mount.entry: /dev/nvidiactl dev/nvidiactl none bind,optional,create=file
 lxc.mount.entry: /dev/nvidia-uvm dev/nvidia-uvm none bind,optional,create=file
