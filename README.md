@@ -1,9 +1,10 @@
 # Install ZoneMinder on Proxmox with EventServer and GPU support
 
 ## Host
-* Intel(R) Core(TM) i7-10700F CPU
-* 64 GB RAM
-* NVIDIA GeForce GTX 1650
+* Hardware (just as reference):
+  * Intel(R) Core(TM) i7-10700F CPU
+  * 64 GB RAM
+  * NVIDIA GeForce GTX 1650
 * Proxmox VE 8.x (Debian 12 Bookworm)
 
 ## Guest
@@ -19,4 +20,4 @@
 * nginx WebServer
 * EventServer with GPU (CUDA) support
 * ffmpeg with GPU (CUDA) support
-* HomeAssistant with mqtt integration
+* HomeAssistant with MQTT integration
