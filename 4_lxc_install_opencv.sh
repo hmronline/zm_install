@@ -14,7 +14,6 @@ export OPENCV_VER=4.7.0 # 4.x
 # https://github.com/opencv/opencv/issues/16380
 
 # Install dependencies
-# This requires about 20GB RAM and 10 CPU Cores to build dlib
 apt-get update && \
         apt install -y g++ wget unzip python3-dev python3-pip python3-dev && \
         apt install -y build-essential cmake ninja-build && \
@@ -23,9 +22,18 @@ apt-get update && \
         apt install -y libdc1394-dev libdc1394-25 libdc1394-22-dev && \
         apt install -y libavcodec-dev libavformat-dev libswscale-dev libavresample-dev && \
         apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev && \
+        apt install -y libavdevice-dev libavfilter-dev libswresample-dev libavutil-dev  && \
+        apt install -y libopenblas-dev liblapack-dev libblas-dev && \
         pip3 install -U pip && \
-        pip3 install -U numpy && \
-        pip3 install face_recognition
+        pip3 install -U numpy --no-cache-dir
+
+# Install Dlib and Face Recognition
+cd /root/ && git clone https://github.com/davisking/dlib.git && \
+        cd /root/dlib && mkdir build; cd build; cmake ..; cmake --build . && \
+        cd /root/dlib && python3 setup.py install && \
+        pip3 install -U face_recognition --no-cache-dir
+
+#        pip3 install -U dlib --no-cache-dir && \
 
 # Download and unpack sources
 cd /root/ && \
