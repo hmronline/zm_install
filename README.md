@@ -1,4 +1,4 @@
-# Install ZoneMinder on Proxmox with EventServer and GPU support
+# Install ZoneMinder on ProxmoxVE with EventServer and GPU support
 
 ## Host
 * Hardware (just as reference):
